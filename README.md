@@ -1,5 +1,7 @@
 # Claims Data Platform Portfolio
 
+[![CI](https://github.com/mkuehn10/claims-data-platform-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/mkuehn10/claims-data-platform-portfolio/actions/workflows/ci.yml)
+
 A deliberately small, reproducible data-engineering portfolio built with
 synthetic property-and-casualty claims data. It demonstrates Snowflake, dbt,
 Airflow, data-quality testing, incremental processing, CI, and operational
