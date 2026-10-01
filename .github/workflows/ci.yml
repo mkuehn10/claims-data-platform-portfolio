@@ -27,6 +27,7 @@ jobs:
       SNOWFLAKE_ACCOUNT: placeholder
       SNOWFLAKE_USER: placeholder
       SNOWFLAKE_PASSWORD: placeholder
+      SNOWFLAKE_DATABASE: CLAIMS_ANALYTICS
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
