@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.env
+target/
+logs/
+dbt_packages/
+dbt_claims/target/
+dbt_claims/logs/
+dbt_claims/dbt_packages/
+**/.user.yml
+dbt_claims/profiles.yml

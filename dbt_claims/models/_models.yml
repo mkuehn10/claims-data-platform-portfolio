@@ -1,0 +1,88 @@
+version: 2
+
+models:
+  - name: stg_policies
+    description: Typed and standardized policy terms from the raw extract.
+    columns:
+      - name: policy_id
+        description: Stable business key for a policy term.
+        data_tests: [not_null, unique]
+      - name: line_of_business
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["AUTO", "HOME"]
+
+  - name: stg_claims
+    description: One current-state row per claim/FNOL.
+    columns:
+      - name: claim_id
+        data_tests: [not_null, unique]
+      - name: policy_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_policies')
+                field: policy_id
+      - name: current_status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["OPEN", "CLOSED", "REOPENED"]
+
+  - name: stg_claim_status_history
+    description: Effective-dated claim status transitions with ingestion timestamps.
+    columns:
+      - name: status_event_id
+        data_tests: [not_null, unique]
+      - name: status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["REPORTED", "OPEN", "CLOSED", "REOPENED"]
+
+  - name: dim_policy
+    description: Policy dimension at policy-term grain.
+    columns:
+      - name: policy_key
+        data_tests: [not_null, unique]
+
+  - name: dim_claim
+    description: Current claim descriptors at claim grain.
+    columns:
+      - name: claim_key
+        data_tests: [not_null, unique]
+      - name: policy_key
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_policy')
+                field: policy_key
+
+  - name: fct_claim_transactions
+    description: >
+      Incremental reserve and payment ledger. A 14-day recorded-at lookback
+      captures late-arriving transactions and merge makes reruns idempotent.
+    columns:
+      - name: transaction_id
+        data_tests: [not_null, unique]
+      - name: claim_key
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_claim')
+                field: claim_key
+
+  - name: fct_claim
+    description: Claim-level financial and lifecycle fact.
+    columns:
+      - name: claim_key
+        data_tests: [not_null, unique]
+      - name: paid_amount
+        data_tests: [not_null]
+
+  - name: mart_claims_kpis
+    description: Monthly claims operating KPIs by line of business.
+    columns:
+      - name: reported_month
+        data_tests: [not_null]

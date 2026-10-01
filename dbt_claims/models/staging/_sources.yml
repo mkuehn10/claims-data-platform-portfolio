@@ -1,0 +1,39 @@
+version: 2
+
+sources:
+  - name: claims_raw
+    description: Raw synthetic P&C lifecycle extracts loaded without transformation.
+    database: "{{ env_var('SNOWFLAKE_DATABASE') }}"
+    schema: RAW
+    config:
+      loaded_at_field: _ingested_at
+      freshness:
+        warn_after: {count: 1, period: day}
+        error_after: {count: 3, period: day}
+    tables:
+      - name: policies
+        columns:
+          - name: policy_id
+            data_tests: [not_null, unique]
+      - name: claims
+        columns:
+          - name: claim_id
+            data_tests: [not_null, unique]
+          - name: policy_id
+            data_tests:
+              - relationships:
+                  arguments:
+                    to: source('claims_raw', 'policies')
+                    field: policy_id
+      - name: reserve_transactions
+        columns:
+          - name: reserve_event_id
+            data_tests: [not_null, unique]
+      - name: payments
+        columns:
+          - name: payment_id
+            data_tests: [not_null, unique]
+      - name: claim_status_history
+        columns:
+          - name: status_event_id
+            data_tests: [not_null, unique]

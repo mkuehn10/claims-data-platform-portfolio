@@ -1,0 +1,15 @@
+claims_analytics:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+      role: "{{ env_var('SNOWFLAKE_ROLE', 'CLAIMS_TRANSFORMER') }}"
+      database: "{{ env_var('SNOWFLAKE_DATABASE', 'CLAIMS_ANALYTICS') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'CLAIMS_WH') }}"
+      schema: "{{ env_var('SNOWFLAKE_SCHEMA', 'ANALYTICS_DEV') }}"
+      threads: 4
+      client_session_keep_alive: false
+      query_tag: claims_portfolio_dbt

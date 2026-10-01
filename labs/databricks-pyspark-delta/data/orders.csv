@@ -1,0 +1,5 @@
+order_id,customer_id,order_date,quantity,unit_price,status
+1001,C101,2026-09-28,2,19.95,new
+1002,C102,2026-09-28,1,120.00,new
+1003,C101,2026-09-29,3,7.50,new
+1004,C103,2026-09-29,4,12.25,new
